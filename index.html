@@ -1,218 +1,343 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Portal de Gestión Judicial - OGA Concepción</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hub Judicial Concepción - Gestión Judicial</title>
   <style>
-    :root {
-      --blue-jus: #0a447c;
-      --blue-dark: #062d54;
-      --accent: #0099cc;
-      --bg: #f4f7f9;
-      --text: #333;
-      --card-bg: #ffffff;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Roboto', sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      padding-bottom: 60px; /* Espacio para el footer fijo */
+    html, body {
+      height: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+      background: linear-gradient(180deg, #ffffff 0%, #f5f5f5 100%);
+      color: #333;
     }
 
-    /* HEADER ESTILO JUSTUCUMAN */
-    header {
-      background: linear-gradient(to right, var(--blue-jus), var(--blue-dark));
+    .header {
+      background: linear-gradient(135deg, #003d82 0%, #005ba8 100%);
       color: white;
-      padding: 2rem;
+      padding: 2.5rem 2rem;
       text-align: center;
-      border-bottom: 5px solid var(--accent);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      border-bottom: 4px solid #ffc107;
+      box-shadow: 0 2px 8px rgba(0, 61, 130, 0.15);
     }
 
-    header h1 {
-      font-size: 1.8rem;
-      font-weight: 700;
+    .header h1 {
+      font-size: 2.2rem;
+      font-weight: 600;
       margin-bottom: 0.5rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: -0.5px;
     }
 
-    header p {
-      font-weight: 300;
-      opacity: 0.9;
-      font-size: 1rem;
+    .header p {
+      font-size: 1.05rem;
+      opacity: 0.95;
+      font-weight: 400;
     }
 
-    /* CONTENEDOR PRINCIPAL */
     .container {
-      max-width: 1100px;
-      margin: 3rem auto;
-      padding: 0 1.5rem;
-      flex: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
     }
 
-    /* GRILLA DE LINKS */
-    .grid {
+    .subtitle {
+      text-align: center;
+      margin-bottom: 3rem;
+      color: #666;
+      font-size: 0.95rem;
+    }
+
+    .links-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
     }
 
-    /* TARJETAS (CARDS) */
-    .card {
-      background: var(--card-bg);
-      border-radius: 4px;
-      padding: 25px;
-      text-decoration: none;
-      color: var(--text);
+    .link-card {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 1.75rem;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      border: 1px solid #e0e6ed;
-      border-top: 4px solid var(--blue-jus);
-      transition: all 0.3s ease;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-      min-height: 160px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
 
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-      border-top-color: var(--accent);
+    .link-card:hover {
+      border-color: #005ba8;
+      box-shadow: 0 8px 24px rgba(0, 91, 168, 0.12);
+      transform: translateY(-4px);
     }
 
-    .card .icon-circle {
-      width: 50px;
-      height: 50px;
-      background: #f0f4f8;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 15px;
-      color: var(--blue-jus);
+    .link-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: #005ba8;
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
 
-    .card h2 {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--blue-jus);
-      margin-bottom: 10px;
+    .link-card:hover::before {
+      opacity: 1;
     }
 
-    .card p {
+    .card-order {
+      display: inline-block;
+      background: #003d82;
+      color: white;
+      font-size: 0.75rem;
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      margin-bottom: 0.75rem;
+      width: fit-content;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .card-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: #003d82;
+    }
+
+    .card-detail {
       font-size: 0.9rem;
       color: #666;
-      line-height: 1.4;
+      line-height: 1.7;
+      margin-bottom: 1.25rem;
+      flex-grow: 1;
     }
 
-    /* FOOTER FIJO */
-    footer {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      background: #222;
-      color: #fff;
+    .card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #005ba8;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding-bottom: 0.25rem;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .card-link:hover {
+      border-bottom-color: #005ba8;
+      gap: 0.75rem;
+    }
+
+    .card-link svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+    }
+
+    .footer {
       text-align: center;
-      padding: 15px;
+      padding: 2rem;
+      color: #999;
       font-size: 0.85rem;
-      border-top: 3px solid var(--accent);
+      border-top: 1px solid #e0e0e0;
+      margin-top: 3rem;
     }
 
-    /* LOADER */
-    #loader {
-      text-align: center;
-      padding: 50px;
-      font-style: italic;
-      color: var(--blue-jus);
+    .footer strong {
+      color: #666;
+      display: block;
+      margin-bottom: 0.5rem;
     }
 
-    @media (max-width: 600px) {
-      header h1 { font-size: 1.4rem; }
-      .grid { grid-template-columns: 1fr; }
+    .update-badge {
+      display: inline-block;
+      background: #c8e6c9;
+      color: #2e7d32;
+      padding: 0.4rem 0.8rem;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      margin-top: 0.5rem;
+      font-weight: 600;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .link-card {
+      animation: fadeInUp 0.5s ease both;
+    }
+
+    .link-card:nth-child(1) { animation-delay: 0.1s; }
+    .link-card:nth-child(2) { animation-delay: 0.2s; }
+    .link-card:nth-child(3) { animation-delay: 0.3s; }
+    .link-card:nth-child(4) { animation-delay: 0.4s; }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 1.5rem;
+      }
+
+      .header {
+        padding: 1.5rem 1.5rem;
+      }
+
+      .container {
+        padding: 1.5rem 1rem;
+      }
+
+      .links-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .card-detail {
+        font-size: 0.85rem;
+      }
+
+      .card-title {
+        font-size: 1.1rem;
+      }
+    }
+
+    .info-box {
+      background: #e3f2fd;
+      border-left: 4px solid #005ba8;
+      padding: 1rem;
+      border-radius: 4px;
+      margin-bottom: 2rem;
+      font-size: 0.9rem;
+      color: #003d82;
+    }
+
+    .info-box strong {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
     }
   </style>
 </head>
 <body>
-
-  <header>
-    <h1>Portal de Gestión Judicial</h1>
-    <p>Oficina de Gestión Asociada de Cobros y Apremios - Concepción</p>
-  </header>
-
-  <div class="container">
-    <div id="loader">Sincronizando accesos...</div>
-    <div class="grid" id="links-grid">
-      </div>
+  <div class="header">
+    <h1>⚖️ Hub Judicial Concepción</h1>
+    <p>Centro de recursos para la gestión judicial eficiente</p>
   </div>
 
-  <footer>
-    © Todos los derechos reservados Corbalán Matías
-  </footer>
+  <div class="container">
+    <div class="subtitle">
+      Acceso rápido a herramientas especializadas para trámites, expedientes y notificaciones
+    </div>
+
+
+
+    <div class="links-grid">
+      <!-- TARJETA 1 -->
+      <div class="link-card">
+        <div class="card-order">Página 1</div>
+        <h3 class="card-title">Gestión Bancaria y Honorarios</h3>
+        <p class="card-detail">Util para crear las cuentas bancarias judiciales, para separar el protocolo de sentencia y para convertir de numeros a letras los montos de honorarios o capital</p>
+        <a href="https://cobrosyapremiosconcepcion-lgtm.github.io/apremiospjt/" target="_blank" rel="noopener noreferrer" class="card-link">
+          Ir a la herramienta
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+        </a>
+      </div>
+
+      <!-- TARJETA 2 -->
+      <div class="link-card">
+        <div class="card-order">Página 2</div>
+        <h3 class="card-title">Control de Trámites Pendientes</h3>
+        <p class="card-detail">Util para ver la carga de tramites pendientes de resolucion al cargar el excel de tramites permitiendo ver la cantidad de registros cargados por area y por usuario</p>
+        <a href="https://cobrosyapremiosconcepcion-lgtm.github.io/tramites/" target="_blank" rel="noopener noreferrer" class="card-link">
+          Ir a la herramienta
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+        </a>
+      </div>
+
+      <!-- TARJETA 3 -->
+      <div class="link-card">
+        <div class="card-order">Página 3</div>
+        <h3 class="card-title">Cronograma de Personal</h3>
+        <p class="card-detail">Web para crear el cronograma de las personas que cumpliran tarea por la tarde</p>
+        <a href="https://cobrosyapremiosconcepcion-lgtm.github.io/turnoTarde/" target="_blank" rel="noopener noreferrer" class="card-link">
+          Ir a la herramienta
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+        </a>
+      </div>
+
+      <!-- TARJETA 4 -->
+      <div class="link-card">
+        <div class="card-order">Página 4</div>
+        <h3 class="card-title">Seguimiento de Procedimientos</h3>
+        <p class="card-detail">Web para el seguimiento de actualizaciones de procedimientos juridicos o de gestión</p>
+        <a href="https://cobrosyapremiosconcepcion-lgtm.github.io/novedades/" target="_blank" rel="noopener noreferrer" class="card-link">
+          Ir a la herramienta
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer">
+      <strong>Hub Judicial Concepción</strong>
+      <p>Diseñado para gestión judicial eficiente | Basado en justucuman.gov.ar</p>
+      <p style="margin-top: 1rem; font-size: 0.8rem;">© 2024 Matias Corbalan. Todos los derechos reservados.</p>
+    </div>
+  </div>
 
   <script>
-    // PEGA AQUÍ TU URL DE GOOGLE SHEETS (OPCIÓN CSV)
-    const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR6z-7_v-59-9-9-9-9-9-9/pub?output=csv'; 
-    // Nota: Sustituye la URL de arriba por la que obtengas al "Publicar como CSV"
+    document.querySelectorAll('.card-link').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const url = this.href;
+        window.open(url, '_blank', 'noopener,noreferrer');
+      });
+    });
 
-    async function cargarLinks() {
-      try {
-        const response = await fetch(SHEET_CSV_URL);
-        const data = await response.text();
-        
-        // Convertir CSV a Array de Objetos
-        const filas = data.split('\n').slice(1); // Omitimos la cabecera
-        const grid = document.getElementById('links-grid');
-        const loader = document.getElementById('loader');
-        
-        let htmlContent = '';
-
-        filas.forEach(fila => {
-          // Separar por comas (maneja casos simples)
-          const columnas = fila.split(',');
-          if (columnas.length >= 3) {
-            const orden   = columnas[0].trim();
-            const url     = columnas[1].trim();
-            const detalle = columnas[2].trim();
-
-            if (url && detalle) {
-              htmlContent += `
-                <a href="${url}" class="card" target="_blank">
-                  <div class="icon-circle">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                  </div>
-                  <h2>${detalle}</h2>
-                  <p>Acceder a la plataforma</p>
-                </a>
-              `;
-            }
-          }
-        });
-
-        loader.style.display = 'none';
-        grid.innerHTML = htmlContent;
-
-      } catch (error) {
-        console.error("Error cargando el Sheet:", error);
-        document.getElementById('loader').innerHTML = "Error al sincronizar con Google Sheets. Verifica la publicación del archivo.";
-      }
-    }
-
-    // Carga inicial
-    cargarLinks();
-
-    // Sincronización automática cada 10 minutos
-    setInterval(cargarLinks, 10 * 60 * 1000);
+    document.querySelectorAll('.link-card').forEach(card => {
+      card.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          const link = this.querySelector('.card-link');
+          if (link) link.click();
+        }
+      });
+    });
   </script>
 </body>
 </html>
