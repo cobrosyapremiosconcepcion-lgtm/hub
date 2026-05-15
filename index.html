@@ -1,67 +1,211 @@
-<script>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portal de Gestión Judicial - OGA Concepción</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue-jus: #0a447c;
+      --blue-dark: #062d54;
+      --accent: #0099cc;
+      --bg: #f4f7f9;
+      --text: #333;
+      --card-bg: #ffffff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding-bottom: 60px; /* Espacio para el footer fijo */
+    }
+
+    /* HEADER ESTILO JUSTUCUMAN */
+    header {
+      background: linear-gradient(to right, var(--blue-jus), var(--blue-dark));
+      color: white;
+      padding: 2rem;
+      text-align: center;
+      border-bottom: 5px solid var(--accent);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    header p {
+      font-weight: 300;
+      opacity: 0.9;
+      font-size: 1rem;
+    }
+
+    /* CONTENEDOR PRINCIPAL */
+    .container {
+      max-width: 1100px;
+      margin: 3rem auto;
+      padding: 0 1.5rem;
+      flex: 1;
+    }
+
+    /* GRILLA DE LINKS */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    /* TARJETAS (CARDS) */
+    .card {
+      background: var(--card-bg);
+      border-radius: 4px;
+      padding: 25px;
+      text-decoration: none;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      border: 1px solid #e0e6ed;
+      border-top: 4px solid var(--blue-jus);
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      min-height: 160px;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+      border-top-color: var(--accent);
+    }
+
+    .card .icon-circle {
+      width: 50px;
+      height: 50px;
+      background: #f0f4f8;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 15px;
+      color: var(--blue-jus);
+    }
+
+    .card h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--blue-jus);
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      font-size: 0.9rem;
+      color: #666;
+      line-height: 1.4;
+    }
+
+    /* FOOTER FIJO */
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: #222;
+      color: #fff;
+      text-align: center;
+      padding: 15px;
+      font-size: 0.85rem;
+      border-top: 3px solid var(--accent);
+    }
+
+    /* LOADER */
+    #loader {
+      text-align: center;
+      padding: 50px;
+      font-style: italic;
+      color: var(--blue-jus);
+    }
+
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.4rem; }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Portal de Gestión Judicial</h1>
+    <p>Oficina de Gestión Asociada de Cobros y Apremios - Concepción</p>
+  </header>
+
+  <div class="container">
+    <div id="loader">Sincronizando accesos...</div>
+    <div class="grid" id="links-grid">
+      </div>
+  </div>
+
+  <footer>
+    © Todos los derechos reservados Corbalán Matías
+  </footer>
+
+  <script>
     // PEGA AQUÍ TU URL DE GOOGLE SHEETS (OPCIÓN CSV)
     const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR6z-7_v-59-9-9-9-9-9-9/pub?output=csv'; 
     // Nota: Sustituye la URL de arriba por la que obtengas al "Publicar como CSV"
 
     async function cargarLinks() {
-      const loader = document.getElementById('loader');
-      const grid = document.getElementById('links-grid');
-      
-      // Intentar con proxy CORS, luego directo
-      const proxies = [
-        `https://corsproxy.io/?url=${encodeURIComponent(SHEET_CSV_URL)}`,
-        `https://api.allorigins.win/raw?url=${encodeURIComponent(SHEET_CSV_URL)}`,
-        SHEET_CSV_URL
-      ];
-
-      let data = null;
-
-      for (const url of proxies) {
-        try {
-          const response = await fetch(url);
-          if (!response.ok) continue;
-          data = await response.text();
-          if (data && data.length > 10) break; // Si descargó datos correctamente, salimos del bucle
-        } catch (error) {
-          console.warn('Fallo al conectar, intentando siguiente ruta...', url);
-        }
-      }
-
-      if (!data) {
-        loader.innerHTML = "Error al sincronizar con Google Sheets. Verifica la publicación del archivo.";
-        return;
-      }
-
-      // Procesar los datos si la descarga fue exitosa
-      const filas = data.split('\n').slice(1); // Omitimos la cabecera
-      let htmlContent = '';
-
-      filas.forEach(fila => {
-        // Expresión regular para separar por comas ignorando comas dentro de comillas
-        const columnas = fila.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || fila.split(',');
+      try {
+        const response = await fetch(SHEET_CSV_URL);
+        const data = await response.text();
         
-        if (columnas.length >= 3) {
-          // Limpiamos comillas extra si las hubiera
-          const orden   = columnas[0].replace(/(^"|"$)/g, '').trim();
-          const url     = columnas[1].replace(/(^"|"$)/g, '').trim();
-          const detalle = columnas[2].replace(/(^"|"$)/g, '').trim();
+        // Convertir CSV a Array de Objetos
+        const filas = data.split('\n').slice(1); // Omitimos la cabecera
+        const grid = document.getElementById('links-grid');
+        const loader = document.getElementById('loader');
+        
+        let htmlContent = '';
 
-          if (url && detalle) {
-            htmlContent += `
-              <a href="${url}" class="card" target="_blank">
-                <div class="icon-circle">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                </div>
-                <h2>${detalle}</h2>
-                <p>Acceder a la plataforma</p>
-              </a>
-            `;
+        filas.forEach(fila => {
+          // Separar por comas (maneja casos simples)
+          const columnas = fila.split(',');
+          if (columnas.length >= 3) {
+            const orden   = columnas[0].trim();
+            const url     = columnas[1].trim();
+            const detalle = columnas[2].trim();
+
+            if (url && detalle) {
+              htmlContent += `
+                <a href="${url}" class="card" target="_blank">
+                  <div class="icon-circle">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                  </div>
+                  <h2>${detalle}</h2>
+                  <p>Acceder a la plataforma</p>
+                </a>
+              `;
+            }
           }
-        }
-      });
+        });
 
-      loader.style.display = 'none';
-      grid.innerHTML = htmlContent;
+        loader.style.display = 'none';
+        grid.innerHTML = htmlContent;
+
+      } catch (error) {
+        console.error("Error cargando el Sheet:", error);
+        document.getElementById('loader').innerHTML = "Error al sincronizar con Google Sheets. Verifica la publicación del archivo.";
+      }
     }
 
     // Carga inicial
@@ -70,3 +214,5 @@
     // Sincronización automática cada 10 minutos
     setInterval(cargarLinks, 10 * 60 * 1000);
   </script>
+</body>
+</html>
